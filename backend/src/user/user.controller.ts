@@ -6,12 +6,15 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from '@prisma/client';
 import { UserDto } from './dto/user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { LoggedUser } from 'src/auth/logged-user.decorator';
 
 @Controller('user')
 export class UserController {
@@ -23,25 +26,29 @@ export class UserController {
   }
 
   @Get()
+  @UseGuards(AuthGuard())
   findMany(): Promise<UserDto[]> {
     return this.userService.findMany();
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard())
   findUnique(@Param('id') userId: string): Promise<User> {
     return this.userService.findUnique(userId);
   }
 
-  @Patch(':id')
+  @Patch()
+  @UseGuards(AuthGuard())
   update(
-    @Param('id') userId: string,
+    @LoggedUser() user: User,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<User> {
-    return this.userService.update(userId, updateUserDto);
+    return this.userService.update(user.id, updateUserDto);
   }
 
-  @Delete(':id')
-  delete(@Param('id') userId: string) {
-    return this.userService.delete(userId);
+  @Delete()
+  @UseGuards(AuthGuard())
+  delete(@LoggedUser() user: User) {
+    return this.userService.delete(user.id);
   }
 }
