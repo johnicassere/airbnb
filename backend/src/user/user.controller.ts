@@ -15,23 +15,36 @@ import { UserDto } from './dto/user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { LoggedUser } from 'src/auth/logged-user.decorator';
+import { ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiTags('user')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
+  @ApiOperation({
+    summary: 'Cria um usuário',
+  })
   create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.userService.create(createUserDto);
   }
 
   @Get()
+  @ApiOperation({
+    summary: 'Listar todos os usuários cadastrados',
+  })
+  @ApiBearerAuth()
   @UseGuards(AuthGuard())
   findMany(): Promise<UserDto[]> {
     return this.userService.findMany();
   }
 
   @Get(':id')
+  @ApiOperation({
+    summary: 'Listar um usuário pelo seu ID',
+  })
+  @ApiBearerAuth()
   @UseGuards(AuthGuard())
   findUnique(@Param('id') userId: string): Promise<User> {
     return this.userService.findUnique(userId);
@@ -39,6 +52,10 @@ export class UserController {
 
   @Patch()
   @UseGuards(AuthGuard())
+  @ApiOperation({
+    summary: 'Atualizar o usuário autenticado',
+  })
+  @ApiBearerAuth()
   update(
     @LoggedUser() user: User,
     @Body() updateUserDto: UpdateUserDto,
@@ -48,6 +65,10 @@ export class UserController {
 
   @Delete()
   @UseGuards(AuthGuard())
+  @ApiOperation({
+    summary: 'Deletar o usuário autenticado',
+  })
+  @ApiBearerAuth()
   delete(@LoggedUser() user: User) {
     return this.userService.delete(user.id);
   }
