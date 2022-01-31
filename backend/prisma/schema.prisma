@@ -8,29 +8,52 @@ datasource db {
 }
 
 model User {
-  id         String      @id @default(uuid())
-  email      String      @unique
-  firstName  String
-  lastName   String
-  password   String
-  imageUrl   String
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-  properties Propertie[]
+  id           String        @id @default(uuid())
+  email        String        @unique
+  firstName    String
+  lastName     String
+  password     String
+  imageUrl     String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  properties   Propertie[]
+  reservations Reservation[]
 
   @@map("user")
 }
 
 model Propertie {
-  id          String   @id @default(uuid())
-  title       String
-  price       Float
-  description String
-  imageUrl    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  User        User?    @relation(fields: [userId], references: [id])
-  userId      String?
+  id           String        @id @default(uuid())
+  title        String
+  price        Float
+  description  String
+  imageUrl     String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  User         User?         @relation(fields: [userId], references: [id])
+  userId       String?
+  reservations Reservation[]
+  options      Option[]
 
   @@map("propertie")
+}
+
+model Reservation {
+  id          String     @id @default(uuid())
+  start       DateTime
+  end         DateTime
+  User        User?      @relation(fields: [userId], references: [id])
+  userId      String?
+  Propertie   Propertie? @relation(fields: [propertieId], references: [id])
+  propertieId String?
+
+  @@map("reservation")
+}
+
+model Option {
+  id         Int      @id @default(autoincrement())
+  name       String
+  properties Propertie[]
+
+  @@map("option")
 }

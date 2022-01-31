@@ -7,10 +7,7 @@ import { CreatePropertieDto } from './dto/create-propertie.dto';
 export class PropertieService {
   constructor(private prismaService: PrismaService) {}
 
-  async create(
-    createPropertieDto: CreatePropertieDto,
-    userId: string,
-  ): Promise<Propertie> {
+  async create(createPropertieDto: CreatePropertieDto, userId: string) {
     const createdPropertie = await this.prismaService.propertie.create({
       data: {
         title: createPropertieDto.title,
@@ -22,6 +19,13 @@ export class PropertieService {
             id: userId,
           },
         },
+        options: {
+          connect: createPropertieDto.options.map((item) => ({ id: item })),
+        },
+      },
+      include: {
+        User: true,
+        options: true,
       },
     });
 

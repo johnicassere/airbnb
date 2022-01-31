@@ -34,8 +34,6 @@ export class UserController {
   @ApiOperation({
     summary: 'Listar todos os usuários cadastrados',
   })
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard())
   findMany(): Promise<UserDto[]> {
     return this.userService.findMany();
   }
@@ -44,8 +42,6 @@ export class UserController {
   @ApiOperation({
     summary: 'Listar um usuário pelo seu ID',
   })
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard())
   findUnique(@Param('id') userId: string): Promise<User> {
     return this.userService.findUnique(userId);
   }

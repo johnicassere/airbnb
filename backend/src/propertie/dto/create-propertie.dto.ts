@@ -1,4 +1,10 @@
-import { IsString, IsNotEmpty, IsNumber, IsUrl } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsNumber,
+  IsUrl,
+  IsArray,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreatePropertieDto {
@@ -21,4 +27,9 @@ export class CreatePropertieDto {
   @IsUrl()
   @ApiProperty()
   imageUrl: string;
+
+  @IsNotEmpty()
+  @IsArray()
+  @ApiProperty()
+  options: number[];
 }
