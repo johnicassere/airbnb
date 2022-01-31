@@ -20,7 +20,7 @@ export class PropertieController {
   create(
     @Body() createPropertieDto: CreatePropertieDto,
     @LoggedUser() user: User,
-  ): Promise<Propertie> {
+  ) {
     return this.propertieService.create(createPropertieDto, user.id);
   }
 
