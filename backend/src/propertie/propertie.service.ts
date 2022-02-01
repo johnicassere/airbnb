@@ -24,7 +24,6 @@ export class PropertieService {
         },
       },
       include: {
-        User: true,
         options: true,
       },
     });

@@ -40,7 +40,6 @@ CREATE TABLE "reservation" (
 -- CreateTable
 CREATE TABLE "option" (
     "id" SERIAL NOT NULL,
-    "icon" TEXT NOT NULL,
     "name" TEXT NOT NULL,
 
     CONSTRAINT "option_pkey" PRIMARY KEY ("id")
